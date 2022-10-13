@@ -18,19 +18,18 @@ class Game
     end
     
     def round
-        @@board = @@board.split
-        print "#{@player}: choose your position on the board: "
-        position = gets.strip.to_i
-        until position > 0 && position < 10 && position.class == Integer do
-            position = gets.strip.to_i
-        end
-        if position > 0 && position < 10 && position.class == Integer
-            
-          @@board.insert((@@board.index("#{position}")+1), "#{@player}").delete_at(@@board.index("#{position}"))
-           @@board = @@board.insert(0, "\n\t ").insert(6, "\n\t").insert(10, "\n\t ").insert(16, "\n\t").insert(20, "\n\t ").join(" ")
-          puts @@board + "\n\n"
-        end
-    end
+      @@board = @@board.split
+      print "#{@player}: choose your position on the board: "
+      position = gets.strip.to_i
+      until position > 0 && position < 10 && position.class == Integer && @@board.include?("#{position}") do
+          puts "Invalid choice. Try again"
+          position = gets.strip.to_i
+      end
+          
+      @@board.insert((@@board.index("#{position}")+1), "#{@player}").delete_at(@@board.index("#{position}"))
+       @@board = @@board.insert(0, "\n\t ").insert(6, "\n\t").insert(10, "\n\t ").insert(16, "\n\t").insert(20, "\n\t ").join(" ")
+      puts @@board + "\n\n"
+  end
     
     def self.board
       @@board
