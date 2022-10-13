@@ -17,19 +17,32 @@ class Game
         gets
     end
     
+    attr_reader :winner
     def round
-      @@board = @@board.split
-      print "#{@player}: choose your position on the board: "
-      position = gets.strip.to_i
-      until position > 0 && position < 10 && position.class == Integer && @@board.include?("#{position}") do
-          puts "Invalid choice. Try again"
-          position = gets.strip.to_i
-      end
-          
-      @@board.insert((@@board.index("#{position}")+1), "#{@player}").delete_at(@@board.index("#{position}"))
-       @@board = @@board.insert(0, "\n\t ").insert(6, "\n\t").insert(10, "\n\t ").insert(16, "\n\t").insert(20, "\n\t ").join(" ")
-      puts @@board + "\n\n"
-  end
+        @winner = false
+        @@board = @@board.split
+        print "#{@player}: choose your position on the board: "
+        position = gets.strip.to_i
+        until position > 0 && position < 10 && position.class == Integer && @@board.include?("#{position}") do
+            puts "Invalid choice. Try again"
+            position = gets.strip.to_i
+        end
+            
+        @@board.insert((@@board.index("#{position}")+1), "#{@player}").delete_at(@@board.index("#{position}"))
+        n = @player
+        if (@@board[0] == n && @@board[2] == n && @@board[4] == n ||
+            @@board[8] == n && @@board[10] == n && @@board[12] == n ||
+            @@board[16] == n && @@board[18] == n && @@board[20] == n || @@board[0] == n && @@board[10] == n && @@board[20] == n || 
+          @@board[4] == n && @@board[10] == n && @@board[16] == n || 
+          @@board[0] == n && @@board[8] == n && @@board[16] == n || 
+          @@board[2] == n && @@board[10] == n && @@board[18] == n || 
+          @@board[4] == n && @@board[12] == n && @@board[20] == n)
+          puts "#{@player} is the winner"
+          @winner = true
+        end
+         @@board = @@board.insert(0, "\n\t ").insert(6, "\n\t").insert(10, "\n\t ").insert(16, "\n\t").insert(20, "\n\t ").join(" ")
+        puts @@board + "\n\n"
+    end
     
     def self.board
       @@board
@@ -56,9 +69,11 @@ player = 1
     when 1
       player1.round
       player = 2
+      break if player1.winner == true
     when 2
       player2.round
       player = 1
+      break if player2.winner == true
     end
 end
 puts "END GAME"
