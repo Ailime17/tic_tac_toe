@@ -1,8 +1,7 @@
 # class for the whole 'tic tac toe' game
 class Game
-  @@board = "\n\t  1 | 2 | 3 \n\t --- --- ---\n\t  4 | 5 | 6 \n\t --- --- ---\n\t  7 | 8 | 9 \n\n"
-
   def initialize
+    @board = "\n\t  1 | 2 | 3 \n\t --- --- ---\n\t  4 | 5 | 6 \n\t --- --- ---\n\t  7 | 8 | 9 \n\n"
     introduce_game
     player1 = gets.strip
     loop do
@@ -19,7 +18,7 @@ class Game
 
   def introduce_game
     puts "\n  ****TIC TAC TOE GAME****"
-    puts @@board
+    puts @board
     puts 'Player1: Choose your letter: o / x'
   end
 
@@ -49,25 +48,25 @@ class Game
   def round(player)
     print "#{player}: choose your position on the board: "
     position = gets.strip
-    until position.to_i > 0 && @@board.include?(position) do
+    until position.to_i > 0 && @board.include?(position) do
       print 'Invalid choice. Try again: '
       position = gets.strip
     end
-    @@board[@@board.index(position)] = player
-    puts @@board
+    @board[@board.index(position)] = player
+    puts @board
     check_for_winner(player)
   end
 
   def check_for_winner(player)
     p = player
-    if (@@board[4] == p && @@board[8] == p && @@board[12] == p) ||
-       (@@board[32] == p && @@board[36] == p && @@board[40] == p) ||
-       (@@board[60] == p && @@board[64] == p && @@board[68] == p) ||
-       (@@board[4] == p && @@board[36] == p && @@board[68] == p) ||
-       (@@board[12] == p && @@board[36] == p && @@board[60] == p) ||
-       (@@board[4] == p && @@board[32] == p && @@board[60] == p) ||
-       (@@board[8] == p && @@board[36] == p && @@board[64] == p) ||
-       (@@board[12] == p && @@board[40] == p && @@board[68] == p)
+    if (@board[4] == p && @board[8] == p && @board[12] == p) ||
+       (@board[32] == p && @board[36] == p && @board[40] == p) ||
+       (@board[60] == p && @board[64] == p && @board[68] == p) ||
+       (@board[4] == p && @board[36] == p && @board[68] == p) ||
+       (@board[12] == p && @board[36] == p && @board[60] == p) ||
+       (@board[4] == p && @board[32] == p && @board[60] == p) ||
+       (@board[8] == p && @board[36] == p && @board[64] == p) ||
+       (@board[12] == p && @board[40] == p && @board[68] == p)
       @winner = true
       announce_game_over(player)
     end
