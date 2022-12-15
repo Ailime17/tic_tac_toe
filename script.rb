@@ -1,79 +1,86 @@
+# class for the whole 'tic tac toe' game
 class Game
-    @@board = "\n\t  1 | 2 | 3 \n\t --- --- ---\n\t  4 | 5 | 6 \n\t --- --- ---\n\t  7 | 8 | 9 "
-    attr_accessor :player
-    
-    def initialize(player = gets.strip)
-      player = 'o' if player == ""
-      @player = player
+  @@board = "\n\t  1 | 2 | 3 \n\t --- --- ---\n\t  4 | 5 | 6 \n\t --- --- ---\n\t  7 | 8 | 9 \n\n"
+
+  def initialize
+    introduce_game
+    player1 = gets.strip
+    loop do
+      break if player1.downcase == 'o' || player1.downcase == 'x'
+
+      print 'Invalid choice. Try again (Choose your letter: o / x): '
+      player1 = gets.strip
     end
-    
-    def inform1
-        puts "Player1: #{@player} >> Press enter to agree and continue"
-        gets
+    @player1 = player1
+    @player2 = (@player1 == 'o' ? 'x' : 'o')
+    @winner = false
+    inform(@player1, @player2)
+  end
+
+  def introduce_game
+    puts "\n  ****TIC TAC TOE GAME****"
+    puts @@board
+    puts 'Player1: Choose your letter: o / x'
+  end
+
+  def inform(player1, player2)
+    print "Player1: #{player1} Player2: #{player2} >> Press enter to agree and start game"
+    gets
+    play_game
+  end
+
+  def play_game
+    player = 1
+    9.times do
+      return if @winner == true
+
+      case player
+      when 1
+        round(@player1)
+        player = 2
+      when 2
+        round(@player2)
+        player = 1
+      end
     end
-  
-    def inform2
-        puts "Player2: #{@player} >> Press enter to agree and start game"
-        gets
+    announce_game_over
+  end
+
+  def round(player)
+    print "#{player}: choose your position on the board: "
+    position = gets.strip
+    until position.to_i > 0 && @@board.include?(position) do
+      print 'Invalid choice. Try again: '
+      position = gets.strip
     end
-    
-    attr_reader :winner
-    def round
-        @winner = false
-        @@board = @@board.split
-        print "#{@player}: choose your position on the board: "
-        position = gets.strip.to_i
-        until position > 0 && position < 10 && position.class == Integer && @@board.include?("#{position}") do
-            puts "Invalid choice. Try again"
-            position = gets.strip.to_i
-        end
-            
-        @@board.insert((@@board.index("#{position}")+1), "#{@player}").delete_at(@@board.index("#{position}"))
-        n = @player
-        if (@@board[0] == n && @@board[2] == n && @@board[4] == n ||
-            @@board[8] == n && @@board[10] == n && @@board[12] == n ||
-            @@board[16] == n && @@board[18] == n && @@board[20] == n || @@board[0] == n && @@board[10] == n && @@board[20] == n || 
-          @@board[4] == n && @@board[10] == n && @@board[16] == n || 
-          @@board[0] == n && @@board[8] == n && @@board[16] == n || 
-          @@board[2] == n && @@board[10] == n && @@board[18] == n || 
-          @@board[4] == n && @@board[12] == n && @@board[20] == n)
-          puts "#{@player} is the winner"
-          @winner = true
-        end
-         @@board = @@board.insert(0, "\n\t ").insert(6, "\n\t").insert(10, "\n\t ").insert(16, "\n\t").insert(20, "\n\t ").join(" ")
-        puts @@board + "\n\n"
+    @@board[@@board.index(position)] = player
+    puts @@board
+    check_for_winner(player)
+  end
+
+  def check_for_winner(player)
+    p = player
+    if (@@board[4] == p && @@board[8] == p && @@board[12] == p) ||
+       (@@board[32] == p && @@board[36] == p && @@board[40] == p) ||
+       (@@board[60] == p && @@board[64] == p && @@board[68] == p) ||
+       (@@board[4] == p && @@board[36] == p && @@board[68] == p) ||
+       (@@board[12] == p && @@board[36] == p && @@board[60] == p) ||
+       (@@board[4] == p && @@board[32] == p && @@board[60] == p) ||
+       (@@board[8] == p && @@board[36] == p && @@board[64] == p) ||
+       (@@board[12] == p && @@board[40] == p && @@board[68] == p)
+      @winner = true
+      announce_game_over(player)
     end
-    
-    def self.board
-      @@board
+  end
+
+  def announce_game_over(player = nil)
+    if @winner == true
+      puts "Player '#{player}' is the winner"
+    else
+      puts "It's a tie"
     end
+    puts 'GAME OVER'
+  end
 end
-  
-puts "\n****TIC TAC TOE GAME****"
-puts Game.board
-puts "\nPlayer1: Choose your letter: o / x"
-player1 = Game.new
-puts "\nPlayer2: Choose your letter: o / x"
-player2 = Game.new
-if player1.player == 'o' && player2.player == 'o'
-    player2.player = 'x'
-elsif player1.player == 'x' && player2.player == 'x'
-    player2.player = 'o'
-end
-player1.inform1
-player2.inform2
-  
-player = 1
-9.times do
-    case player
-    when 1
-      player1.round
-      player = 2
-      break if player1.winner == true
-    when 2
-      player2.round
-      player = 1
-      break if player2.winner == true
-    end
-end
-puts "END GAME"
+
+Game.new
