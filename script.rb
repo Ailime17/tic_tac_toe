@@ -2,33 +2,14 @@
 class Game
   def initialize
     @board = "\n\t  1 | 2 | 3 \n\t --- --- ---\n\t  4 | 5 | 6 \n\t --- --- ---\n\t  7 | 8 | 9 \n\n"
-    introduce_game
-    player1 = gets.strip
-    loop do
-      break if player1.downcase == 'o' || player1.downcase == 'x'
-
-      print 'Invalid choice. Try again (Choose your letter: o / x): '
-      player1 = gets.strip
-    end
-    @player1 = player1
-    @player2 = (@player1 == 'o' ? 'x' : 'o')
     @winner = false
-    inform(@player1, @player2)
-  end
-
-  def introduce_game
-    puts "\n  ****TIC TAC TOE GAME****"
-    puts @board
-    puts 'Player1: Choose your letter: o / x'
-  end
-
-  def inform(player1, player2)
-    print "Player1: #{player1} Player2: #{player2} >> Press enter to agree and start game"
-    gets
-    play_game
+    @player1 = nil
+    @player2 = nil
   end
 
   def play_game
+    introduce_game
+    inform(@player1, @player2)
     player = 1
     9.times do
       return if @winner == true
@@ -43,6 +24,30 @@ class Game
       end
     end
     announce_game_over
+  end
+
+  def introduce_game
+    puts "\n  ****TIC TAC TOE GAME****"
+    puts @board
+    puts 'Player1: Choose your letter: o / x'
+    @player1 = create_player_one
+    @player2 = (@player1 == 'o' ? 'x' : 'o')
+  end
+
+  def create_player_one
+    player1 = gets.strip
+    loop do
+      break if player1.downcase == 'o' || player1.downcase == 'x'
+
+      print 'Invalid choice. Try again (Choose your letter: o / x): '
+      player1 = gets.strip
+    end
+    player1
+  end
+
+  def inform(player1, player2)
+    print "Player1: #{player1} Player2: #{player2} >> Press enter to agree and start game"
+    gets
   end
 
   def round(player)
@@ -82,4 +87,5 @@ class Game
   end
 end
 
-Game.new
+# game = Game.new
+# game.play_game
