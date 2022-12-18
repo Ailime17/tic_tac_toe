@@ -30,6 +30,10 @@ class Game
     puts "\n  ****TIC TAC TOE GAME****"
     puts @board
     puts 'Player1: Choose your letter: o / x'
+    create_players
+  end
+
+  def create_players
     @player1 = create_player_one
     @player2 = (@player1 == 'o' ? 'x' : 'o')
   end
